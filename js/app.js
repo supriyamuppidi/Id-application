@@ -1,5 +1,15 @@
-var valid = 1;
-function addDetails() {
+var valid = 0;
+function addDetails()
+{
+    valid = 0;
+    $("span").hide();
+    var validate = validateDetails();
+    if(validate)
+    {
+        postData();
+    }
+}
+function validateDetails() {
     console.log("button clicked");
     if (!validateFirstname())
         displayErrorMessageForFirstname();
@@ -13,6 +23,8 @@ function addDetails() {
         displayErrorMessageForBloodGroup();
     if (!validateReasonsForIssue())
         displayErrorMessageForReasonsForIssue();
+    /*if (!validateDate())
+        displayErrorMessageForDate();*/
     if (!validateReasonsForEmailid())
         displayErrorMessageForEmailid();
     if (!validateReasonsForEmployeeContactNumber())
@@ -20,7 +32,11 @@ function addDetails() {
     if (!validateReasonsForEmergencyContactNumber())
         displayErrorMessageForEmergencyContactNumber();
 
-
+        if(valid == 0)
+        {
+            return true;
+        }
+        return false;
 }
 function displayErrorMessageForFirstname() {
     valid++;
@@ -48,20 +64,29 @@ function displayErrorMessageForReasonsForIssue() {
     $('#errorreasonsforissue').show();
 }
 function displayErrorMessageForEmployeeContactNumber(){
+    valid++;
     $('#employeeContactNumber').css("border", "solid 1px red");
     $('#erroremployeeContactNumber').show();
 }
 function displayErrorMessageForEmergencyContactNumber(){
+    valid++;
     $('#emergencycontactnumber').css("border", "solid 1px red");
     $('#erroremergencycontactnumber').show();
 }
 function displayErrorMessageForBloodGroup(){
+    valid++;
     $('#bloodgroup').css("border", "solid 1px red");
     $('#errorbloodgroup').show();
 }
 function displayErrorMessageForEmailid(){
+    valid++;
     $('#emailid').css("border", "solid 1px red");
     $('#erroremailid').show();
+}
+function displayErrorMessageForDate(){
+    valid++;
+    $('#dateofemployment').css("border", "solid 1px red");
+    $('#errordateofemployment').show();
 }
 
 function validateFirstname() {
@@ -104,12 +129,19 @@ function validateReasonsForEmployeeContactNumber() {
     if (contactnumber == "" ) {
         return false;
     }
+    if(contactnumber.length<10) {
+        alert('Please enter valid contact number that consists of 10 digits');
+    }
+        
     return true;
 }
 function validateReasonsForEmergencyContactNumber(){
     const contactnumber = $('#emergencycontactnumber').val();
     if (contactnumber == "" ) {
         return false;
+    }
+     if(contactnumber.length<10) {
+        alert('Please enter valid contact number that consists of 10 digits');
     }
     return true;
 }
@@ -118,6 +150,7 @@ function validateBloodGroup(){
     if (bloodgroup == "" ) {
         return false;
     }
+    checkBloodGroup();
     return true;
 }
 function validateReasonsForEmailid(){
@@ -128,13 +161,29 @@ function validateReasonsForEmailid(){
     checkEmail();        
     return true;
 }
+function validateDate() {
+    const date = $('#dateofemployment').val();
+    if (dateofemployment == "") 
+    {
+        return false;
+    }
+}
 function checkEmail(){
-    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    const reg = /^([A-Za-z0-9_\-\.])+\@virtusa+\.([A-Za-z]{2,4})$/;
     const emailid = $('#emailid').val();
     if (reg.test(emailid) == false) 
     {
         alert('Invalid Email Address');
-        return (false);
+        return false;
+    }
+ }
+function checkBloodGroup(){
+    const reg = /^(A|B|AB|O)[-+]$/;
+    const bloodgroup = $('#bloodgroup ').val();
+    if (reg.test(bloodgroup ) == false) 
+    {
+        alert('Invalid blood group');
+        return false;
     }
  }
 
@@ -147,12 +196,45 @@ function phoneno(event) {
     return true;
 }
 function postData() {
+    console.log("Finally inside posting the data");
+    const firstName = $("#firstname").val();
+    const fullName = $("#fullname").val();
+    const designation = $('#designation').val();
+    const employeecode = $('#employeecode').val();
+    const reasonsforissue = $('input[name=reasonsforissue]:checked').val();
+    const contactnumber = $('#employeeContactNumber').val();
+    const bloodgroup = $('#bloodgroup').val();
+    const contactnumber1 = $('#emergencycontactnumber').val();
+    const emailid = $('#emailid').val();
+    const date = $('#dateofemployment').val();
+
+    const formDetails = {
+        "firstName" : firstName,
+        "fullName" : fullName,
+        "designation" : designation,
+        "employeecode" : employeecode,
+        "reasonsforissue" : reasonsforissue,
+        "contactnumber" : contactnumber,
+        "contactnumber1" : contactnumber1,
+        "bloodgroup" : bloodgroup,
+        "emailid" : emailid,
+        "date" : date
+    }
+    const data = JSON.stringify(formDetails);
+    console.log(data);
     $.ajax({
-        type: 'POST',
-        url: 'https://id-pplication-form.firebaseio.com/priya.json',
-        data: JSON.stringify(data),
-        success: onPostsuccess,
-    })
+        type: "POST",
+        url: "https://id-pplication-form.firebaseio.com/application.json",
+        data: data,
+        success : function(data)
+        {
+            console.log("In success");
+        },
+        error : function(err)
+        {
+            console.log(err);
+        }
+      });
 }
 
 $('document').ready(() => {

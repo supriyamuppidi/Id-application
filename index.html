@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Application Id Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
 </head>
 
@@ -62,7 +63,8 @@
         <span class="span-for-errors" id="errorreasonsforissue">Please enter your Reasons for Issue:</span>        
         <div class="input-group">
             <label for="dateofemployment">Date of Employment:</label>
-            <input type="date" id="dateofemployment" required>
+            <input type="date" id="dateofemployment" required><br>
+	    <span class="span-for-errors" id="errordateofemployment">Please enter your Date of Employment</span>
         </div><br>
         <div class="input-group">
             <label for="emailid">Email-id:</label>
@@ -71,12 +73,12 @@
         </div><br>
         <div class="input-group">
             <label for="employeeContactNumber">Employee Contact Number:</label>
-            <input type="text" id="employeeContactNumber" onkeypress="return phoneno(event)" maxlength="10" required><br>
+            <input type="text" id="employeeContactNumber" onkeypress="return phoneno(event)" minlength="10" maxlength="10" required><br>
             <span class="span-for-errors" id="erroremployeeContactNumber">Please enter your Employee Contact Number</span>
         </div><br>
         <div class="input-group">
             <label for="emergencycontactnumber">Emergency Contact Number:</label>
-            <input type="text" id="emergencycontactnumber"onkeypress="return phoneno(event)" maxlength="10" required><br>
+            <input type="text" id="emergencycontactnumber"onkeypress="return phoneno(event)" minlength="10" maxlength="10" required><br>
             <span class="span-for-errors" id="erroremergencycontactnumber">Please enter your Emergency Contact Number</span>
         </div><br>
          <button type="button" onclick="addDetails()">Add details</button>
@@ -87,3 +89,4 @@
 </body>
 
 </html>
+
